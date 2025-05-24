@@ -149,33 +149,28 @@ const WeatherChart: React.FC<WeatherChartProps> = ({
           />
           
           <Tooltip content={<CustomTooltip />} />
+
+          
           
           <Legend 
             wrapperStyle={{ fontSize: 12, paddingTop: 10 }}
             iconType="line"
           />
           
-          {/* Area fill for precipitation probability */}
-          <Area
+           {/* Area fill for precipitation probability */}
+           <Area
             yAxisId="left"
+            activeDot={{ r: 5 }}
+            dot={{ r: 3, fill: '#fff', fillOpacity: 1 }}
             type="monotone"
             dataKey="precipProbability"
             fill="#2196F3"
             fillOpacity={0.1}
-            stroke="none"
-          />
-          
-          {/* Precipitation probability line */}
-          <Line
-            yAxisId="left"
-            type="monotone"
-            dataKey="precipProbability"
             stroke="#2196F3"
+            name="Precipitation Chance"
             strokeWidth={2}
-            dot={{ r: 3 }}
-            activeDot={{ r: 5 }}
-            name="Precipitation %"
           />
+         
           
           {/* Wind speed line */}
           <Line

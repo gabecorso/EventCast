@@ -10,6 +10,7 @@ import {
   formatTime 
 } from '../utils/helpers';
 import { WeekViewProps, DayWeather, TimeRangeAverages } from '../types';
+import WeatherChart from './WeatherChart';
 
 /**
  * WeekView component implementing comprehensive weather data display with TypeScript
@@ -58,7 +59,7 @@ const WeekView: React.FC<WeekViewProps> = ({
           onClick={() => onDayExpand(weekType, index)}
           role="button"
           tabIndex={0}
-          onKeyUp={(e) => {
+          onKeyPress={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               onDayExpand(weekType, index);
@@ -200,9 +201,20 @@ const WeekView: React.FC<WeekViewProps> = ({
   return (
     <div className="week-view">
       {filteredDays.length > 0 ? (
-        <div className="daily-weather-grid" role="list">
-          {filteredDays.map((day, index) => renderDayWeather(day, index))}
-        </div>
+        <>
+          {/* Display chart for the selected day's hourly data */}
+          {filteredDays.length === 1 && (
+            <WeatherChart
+              hourlyData={filteredDays[0].hourlyData}
+              selectedTimeRange={selectedTimeRange}
+              weekType={weekType}
+            />
+          )}
+          
+          <div className="daily-weather-grid" role="list">
+            {filteredDays.map((day, index) => renderDayWeather(day, index))}
+          </div>
+        </>
       ) : (
         <div className="no-data-message" role="status">
           <FontAwesomeIcon icon={['fas', 'calendar-times'] as IconProp} size="2x" />
