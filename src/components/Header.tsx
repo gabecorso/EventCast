@@ -6,6 +6,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 // import TimeRangeSelector from './TimeRangeSelector';
 import { useWeather } from '../context/WeatherContext';
 import { getDayName } from '../utils/helpers';
+import LocationSelector from './LocationSelector';
+import DaySelector from './DaySelector';
 
 /**
  * Header component implementing primary application controls with TypeScript
@@ -28,6 +30,8 @@ const Header: React.FC = () => {
         </div>
         
         <nav className="header-controls" role="navigation" aria-label="Weather controls">
+            <LocationSelector />
+            <DaySelector />
           {/* <LocationSelector />
           <DaySelector />
           <TimeRangeSelector /> */}
