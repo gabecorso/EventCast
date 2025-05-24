@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -6,6 +6,8 @@ import LoadingState from './components/LoadingState';
 import config from './config/config';
 import { WeatherProvider } from './context/WeatherContext';
 import { WeatherContextType, WeatherData, TimeRange } from './types';
+import weatherService from './services/weatherService';
+import Header from './components/Header';
 
 function App() {
 
@@ -17,7 +19,43 @@ function App() {
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>(config.DEFAULT_TIME_RANGES[1]); // Afternoon by default
 
 
-  const contextValue: WeatherContextType = {
+  const fetchWeatherData = useCallback(async (searchLocation: string): Promise<void> => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const data: WeatherData = await weatherService.getWeatherForecast(searchLocation);
+      setWeatherData(data);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch weather data';
+      setError(errorMessage);
+      console.error('Weather fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchWeatherData(location);
+  }, [location, fetchWeatherData]);
+
+  const handleLocationChange = useCallback((newLocation: string): void => {
+    setLocation(newLocation);
+  }, []);
+
+  const handleDayChange = useCallback((newDay: number): void => {
+    setSelectedDay(newDay);
+  }, []);
+
+  const handleTimeRangeChange = useCallback((newTimeRange: TimeRange): void => {
+    setSelectedTimeRange(newTimeRange);
+  }, []);
+
+  const refreshWeatherData = useCallback((): void => {
+    fetchWeatherData(location);
+  }, [location, fetchWeatherData]);
+
+  const weatherContextValue: WeatherContextType = {
     weatherData,
     location,
     selectedDay,
@@ -33,7 +71,7 @@ function App() {
   return (
     <ErrorBoundary>
       <WeatherProvider value={weatherContextValue}>
-        
+        <Header />
       </WeatherProvider>
       <LoadingState />
     </ErrorBoundary>
