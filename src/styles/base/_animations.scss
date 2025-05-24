@@ -1,0 +1,127 @@
+// Animation definitions for weather application
+// Provides smooth transitions and loading states
+
+// Loading animation for weather icons
+@keyframes weather-float {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-10px) scale(1.05);
+      opacity: 0.8;
+    }
+  }
+  
+  // Pulse animation for loading states
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  // Fade in animation for content appearance
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  // Slide animations for expandable content
+  @keyframes slideDown {
+    from {
+      max-height: 0;
+      opacity: 0;
+    }
+    to {
+      max-height: 1000px;
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      max-height: 1000px;
+      opacity: 1;
+    }
+    to {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+  
+  // Skeleton loading animation
+  @keyframes skeleton-loading {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  
+  // Weather icon animations
+  .loading-animation {
+    .loading-icon {
+      animation: weather-float 2s ease-in-out infinite;
+      
+      &.primary {
+        animation-delay: 0s;
+      }
+      
+      &.secondary {
+        animation-delay: 0.3s;
+      }
+      
+      &.tertiary {
+        animation-delay: 0.6s;
+      }
+    }
+  }
+  
+  // Expand/collapse animation
+  .expanded-details {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  // Skeleton screen animation
+  .skeleton-line,
+  .skeleton-header,
+  .skeleton-day-header,
+  .skeleton-day-content {
+    background: linear-gradient(
+      90deg,
+      $color-light-grey 0%,
+      lighten($color-light-grey, 5%) 50%,
+      $color-light-grey 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+  }
+  
+  // Hover animations
+  @mixin hover-lift {
+    transition: transform $transition-base, box-shadow $transition-base;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+    }
+  }
+  
+  // Focus animations
+  @mixin focus-glow {
+    transition: box-shadow $transition-fast;
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.25);
+    }
+  }

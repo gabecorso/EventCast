@@ -1,0 +1,104 @@
+// Location selector component styles
+// Manages search input and location selection interface
+
+.location-selector {
+    position: relative;
+    width: 100%;
+  }
+  
+  .location-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    
+    .location-icon {
+      position: absolute;
+      left: $spacing-md;
+      color: $color-grey;
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+  
+  .location-input {
+    width: 100%;
+    padding: $spacing-sm $spacing-2xl $spacing-sm $spacing-2xl + $spacing-md;
+    font-size: $font-size-base;
+    border: 2px solid $color-light-grey;
+    border-radius: $radius-md;
+    background-color: $color-white;
+    transition: all $transition-base;
+    
+    &:hover {
+      border-color: darken($color-light-grey, 10%);
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    }
+    
+    &.invalid {
+      border-color: $color-danger;
+      
+      &:focus {
+        box-shadow: 0 0 0 3px rgba($color-danger, 0.1);
+      }
+    }
+    
+    &::placeholder {
+      color: $color-grey;
+    }
+  }
+  
+  .clear-button {
+    position: absolute;
+    right: $spacing-2xl + $spacing-sm;
+    padding: $spacing-xs;
+    color: $color-grey;
+    background: none;
+    border: none;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition: all $transition-fast;
+    
+    &:hover {
+      color: $color-dark-grey;
+      background-color: $color-light-grey;
+    }
+    
+    &:focus {
+      @include focus-state;
+    }
+  }
+  
+  .search-indicator {
+    position: absolute;
+    right: $spacing-md;
+    color: $color-primary;
+    pointer-events: none;
+    
+    svg {
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  .location-helper-text {
+    margin-top: $spacing-xs;
+    font-size: $font-size-sm;
+    color: $color-grey;
+    
+    &.error {
+      color: $color-danger;
+    }
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }

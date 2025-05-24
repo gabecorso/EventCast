@@ -1,0 +1,90 @@
+// Header component styles
+// Manages layout and appearance of application header controls
+
+.app-header {
+    background-color: $color-white;
+    box-shadow: $shadow-sm;
+    position: sticky;
+    top: 0;
+    z-index: $z-index-dropdown;
+  }
+  
+  .header-content {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: $spacing-lg;
+    
+    @include breakpoint(tablet) {
+      padding: $spacing-md;
+    }
+    
+    @include breakpoint(mobile) {
+      padding: $spacing-sm $spacing-md;
+    }
+  }
+  
+  .app-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+    
+    h1 {
+      margin: 0;
+      font-size: $font-size-xl;
+      color: $color-black;
+      
+      @include breakpoint(tablet) {
+        font-size: $font-size-lg;
+      }
+      
+      @include breakpoint(mobile) {
+        font-size: $font-size-base;
+      }
+    }
+    
+    .app-icon {
+      color: $color-primary;
+      font-size: $font-size-2xl;
+      
+      @include breakpoint(mobile) {
+        font-size: $font-size-xl;
+      }
+    }
+  }
+  
+  .header-controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: $spacing-lg;
+    align-items: start;
+    
+    @include breakpoint(tablet) {
+      grid-template-columns: 1fr;
+      gap: $spacing-md;
+    }
+    
+    @include breakpoint(mobile) {
+      grid-template-columns: 1fr;
+      gap: $spacing-sm;
+    }
+  }
+  
+  .header-summary {
+    margin-top: $spacing-md;
+    padding: $spacing-sm $spacing-md;
+    background-color: $color-light-grey;
+    border-radius: $radius-md;
+    
+    .summary-text {
+      margin: 0;
+      font-size: $font-size-sm;
+      color: $color-dark-grey;
+      text-align: center;
+      
+      strong {
+        color: $color-primary;
+        font-weight: $font-weight-semibold;
+      }
+    }
+  }

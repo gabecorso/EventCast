@@ -1,0 +1,90 @@
+// Day and Time selector component styles
+// Manages dropdown styling for day and time range selection
+
+// Shared styles for selector components
+.day-selector,
+.time-range-selector {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.day-selector-label,
+.time-range-label {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-dark-grey;
+  
+  .label-icon {
+    color: $color-primary;
+  }
+}
+
+.day-selector-dropdown,
+.time-range-dropdown {
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  border: 2px solid $color-light-grey;
+  border-radius: $radius-md;
+  background-color: $color-white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23333' d='M10.6.6L6 5.2 1.4.6.6 1.4l5.4 5.4 5.4-5.4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-md center;
+  background-size: 12px;
+  appearance: none;
+  cursor: pointer;
+  transition: all $transition-base;
+  padding-right: $spacing-2xl;
+  
+  &:hover {
+    border-color: darken($color-light-grey, 10%);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+  }
+  
+  option {
+    padding: $spacing-sm;
+  }
+}
+
+.day-selector-preview,
+.time-range-info {
+  margin-top: $spacing-xs;
+  
+  .preview-text,
+  .info-text {
+    margin: 0;
+    font-size: $font-size-xs;
+    color: $color-grey;
+    
+    strong {
+      color: $color-primary;
+    }
+  }
+}
+
+// Mobile responsive adjustments
+@include breakpoint(mobile) {
+  .day-selector-label,
+  .time-range-label {
+    font-size: $font-size-xs;
+    
+    span {
+      @include visually-hidden;
+    }
+  }
+  
+  .day-selector-dropdown,
+  .time-range-dropdown {
+    font-size: $font-size-sm;
+    padding: $spacing-sm;
+  }
+}

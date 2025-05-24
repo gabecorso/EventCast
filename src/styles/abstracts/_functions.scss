@@ -1,0 +1,64 @@
+// Sass functions for the weather application
+// Provides reusable calculation and conversion utilities
+
+// Convert pixels to rem units for responsive sizing
+@function px-to-rem($px, $base: 16) {
+    @return #{$px / $base}rem;
+  }
+  
+  // Calculate contrast ratio for accessibility compliance
+  @function contrast-ratio($color1, $color2) {
+    $luminance1: luminance($color1) + 0.05;
+    $luminance2: luminance($color2) + 0.05;
+    
+    @if $luminance1 > $luminance2 {
+      @return $luminance1 / $luminance2;
+    } @else {
+      @return $luminance2 / $luminance1;
+    }
+  }
+  
+  // Calculate relative luminance for WCAG compliance
+  @function luminance($color) {
+    $rgb: (
+      red: red($color) / 255,
+      green: green($color) / 255,
+      blue: blue($color) / 255
+    );
+    
+    @each $channel, $value in $rgb {
+      @if $value <= 0.03928 {
+        $rgb: map-merge($rgb, ($channel: $value / 12.92));
+      } @else {
+        $rgb: map-merge($rgb, ($channel: pow(($value + 0.055) / 1.055, 2.4)));
+      }
+    }
+    
+    @return 0.2126 * map-get($rgb, red) + 0.7152 * map-get($rgb, green) + 0.0722 * map-get($rgb, blue);
+  }
+  
+  // Power function for luminance calculation
+  @function pow($number, $exponent) {
+    $result: 1;
+    @for $i from 1 through $exponent {
+      $result: $result * $number;
+    }
+    @return $result;
+  }
+  
+  // Strip unit from value for calculations
+  @function strip-unit($value) {
+    @return $value / ($value * 0 + 1);
+  }
+  
+  // Calculate optimal text color based on background
+  @function get-text-color($bg-color) {
+    $light-contrast: contrast-ratio($bg-color, $color-white);
+    $dark-contrast: contrast-ratio($bg-color, $color-black);
+    
+    @if $light-contrast > $dark-contrast {
+      @return $color-white;
+    } @else {
+      @return $color-black;
+    }
+  }
