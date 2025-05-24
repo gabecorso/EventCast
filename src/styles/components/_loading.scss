@@ -1,0 +1,182 @@
+// Loading state component styles
+// Manages loading animations and skeleton screens
+
+.loading-state {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-2xl;
+  }
+  
+  .loading-content {
+    text-align: center;
+    margin-bottom: $spacing-2xl;
+    
+    .loading-animation {
+      margin-bottom: $spacing-lg;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $spacing-md;
+      
+      .loading-icon {
+        color: $color-primary;
+        opacity: 0.8;
+      }
+    }
+    
+    .loading-title {
+      margin: 0 0 $spacing-sm 0;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
+      color: $color-black;
+    }
+    
+    .loading-message {
+      margin: 0 auto;
+      max-width: 400px;
+      font-size: $font-size-base;
+      color: $color-grey;
+      line-height: 1.6;
+    }
+  }
+  
+  // Skeleton loading screens
+  .skeleton-container {
+    width: 100%;
+    max-width: $container-max-width;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $grid-gap;
+    
+    @include breakpoint(tablet) {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+    }
+  }
+  
+  .skeleton-week {
+    @include card($spacing-lg);
+    
+    .skeleton-header {
+      height: 32px;
+      width: 150px;
+      margin-bottom: $spacing-lg;
+      border-radius: $radius-sm;
+    }
+    
+    .skeleton-day {
+      margin-bottom: $spacing-md;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .skeleton-day-header {
+        height: 24px;
+        width: 120px;
+        margin-bottom: $spacing-sm;
+        border-radius: $radius-sm;
+      }
+      
+      .skeleton-day-content {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+        
+        .skeleton-line {
+          height: 16px;
+          width: 100%;
+          border-radius: $radius-sm;
+          
+          &.short {
+            width: 60%;
+          }
+        }
+      }
+    }
+  }
+  
+  // Error boundary styles
+  .error-boundary {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xl;
+    background-color: $color-off-white;
+  }
+  
+  .error-container {
+    max-width: 600px;
+    text-align: center;
+    @include card($spacing-2xl);
+    
+    .error-icon {
+      color: $color-danger;
+      margin-bottom: $spacing-lg;
+    }
+    
+    .error-title {
+      margin: 0 0 $spacing-md 0;
+      font-size: $font-size-2xl;
+      color: $color-black;
+    }
+    
+    .error-message {
+      margin: 0 0 $spacing-xl 0;
+      font-size: $font-size-base;
+      color: $color-dark-grey;
+      line-height: 1.6;
+    }
+    
+    .error-details {
+      margin: $spacing-lg 0;
+      text-align: left;
+      
+      summary {
+        cursor: pointer;
+        padding: $spacing-sm;
+        background-color: $color-light-grey;
+        border-radius: $radius-sm;
+        font-weight: $font-weight-medium;
+        
+        &:hover {
+          background-color: darken($color-light-grey, 5%);
+        }
+      }
+      
+      .error-stack {
+        margin-top: $spacing-md;
+        padding: $spacing-md;
+        background-color: $color-black;
+        color: $color-white;
+        border-radius: $radius-sm;
+        font-family: $font-mono;
+        font-size: $font-size-sm;
+        overflow-x: auto;
+        
+        code {
+          white-space: pre-wrap;
+          word-break: break-word;
+        }
+      }
+    }
+    
+    .error-actions {
+      display: flex;
+      gap: $spacing-md;
+      justify-content: center;
+      
+      @include breakpoint(mobile) {
+        flex-direction: column;
+        
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }

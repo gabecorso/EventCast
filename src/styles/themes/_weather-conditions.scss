@@ -1,0 +1,118 @@
+// Weather condition theming styles
+// Provides visual variations based on weather conditions
+
+// Weather condition color mappings
+$weather-conditions: (
+  sunny: (
+    primary: $color-sunny,
+    light: lighten($color-sunny, 30%),
+    dark: darken($color-sunny, 10%),
+    text: $color-dark-grey
+  ),
+  cloudy: (
+    primary: $color-cloudy,
+    light: lighten($color-cloudy, 20%),
+    dark: darken($color-cloudy, 10%),
+    text: $color-white
+  ),
+  rainy: (
+    primary: $color-rainy,
+    light: lighten($color-rainy, 15%),
+    dark: darken($color-rainy, 10%),
+    text: $color-white
+  ),
+  stormy: (
+    primary: $color-stormy,
+    light: lighten($color-stormy, 10%),
+    dark: darken($color-stormy, 5%),
+    text: $color-white
+  ),
+  snowy: (
+    primary: #E3F2FD,
+    light: #FFFFFF,
+    dark: #BBDEFB,
+    text: $color-dark-grey
+  )
+);
+
+// Generate weather condition classes
+@each $condition, $colors in $weather-conditions {
+  .weather-#{$condition} {
+    background: linear-gradient(
+      135deg,
+      map-get($colors, light) 0%,
+      map-get($colors, primary) 100%
+    );
+    color: map-get($colors, text);
+    
+    .weather-icon {
+      color: map-get($colors, dark);
+    }
+  }
+}
+
+// Time of day theming
+.time-morning {
+  background: linear-gradient(135deg, #FFE5B4 0%, #FFDAB9 100%);
+  
+  .app-header {
+    background: linear-gradient(to bottom, #FFF8E1 0%, $color-white 100%);
+  }
+}
+
+.time-afternoon {
+  background: linear-gradient(135deg, #87CEEB 0%, #98D8E8 100%);
+  
+  .app-header {
+    background: linear-gradient(to bottom, #E3F2FD 0%, $color-white 100%);
+  }
+}
+
+.time-evening {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+  
+  .app-header {
+    background: linear-gradient(to bottom, #FFF3E0 0%, $color-white 100%);
+  }
+}
+
+// Seasonal theming (optional enhancement)
+.season-spring {
+  .app-container {
+    background-color: #F8FFF8;
+  }
+  
+  .color-primary {
+    color: #4CAF50;
+  }
+}
+
+.season-summer {
+  .app-container {
+    background-color: #FFF8E1;
+  }
+  
+  .color-primary {
+    color: #FF9800;
+  }
+}
+
+.season-fall {
+  .app-container {
+    background-color: #FFF5EE;
+  }
+  
+  .color-primary {
+    color: #FF5722;
+  }
+}
+
+.season-winter {
+  .app-container {
+    background-color: #F5F5F5;
+  }
+  
+  .color-primary {
+    color: #2196F3;
+  }
+}

@@ -1,0 +1,214 @@
+// Weather card component styles
+// Manages daily weather display and expandable details
+
+.daily-weather-item {
+    @include card($spacing-md);
+    margin-bottom: $spacing-md;
+    transition: all $transition-base;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+    
+    &.expanded {
+      box-shadow: $shadow-lg;
+      
+      .expand-button svg {
+        transform: rotate(180deg);
+      }
+    }
+    
+    // Weather condition theming
+    &.sunny {
+      border-left: 4px solid $color-sunny;
+      
+      .weather-icon {
+        color: $color-sunny;
+      }
+    }
+    
+    &.cloudy {
+      border-left: 4px solid $color-cloudy;
+      
+      .weather-icon {
+        color: $color-cloudy;
+      }
+    }
+    
+    &.rainy {
+      border-left: 4px solid $color-rainy;
+      
+      .weather-icon {
+        color: $color-rainy;
+      }
+    }
+    
+    &.stormy {
+      border-left: 4px solid $color-stormy;
+      
+      .weather-icon {
+        color: $color-stormy;
+      }
+    }
+  }
+  
+  .day-header {
+    display: grid;
+    grid-template-columns: 120px 1fr auto auto;
+    gap: $spacing-md;
+    align-items: center;
+    cursor: pointer;
+    
+    @include breakpoint(tablet) {
+      grid-template-columns: 100px 1fr auto;
+      gap: $spacing-sm;
+      
+      .suitability-indicator {
+        grid-column: 1 / -1;
+        margin-top: $spacing-sm;
+        justify-self: stretch;
+      }
+    }
+    
+    @include breakpoint(mobile) {
+      grid-template-columns: 1fr auto;
+      gap: $spacing-sm;
+      
+      .date-info,
+      .weather-summary {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+  
+  .date-info {
+    display: flex;
+    flex-direction: column;
+    
+    .day-name {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-black;
+    }
+    
+    .date {
+      font-size: $font-size-sm;
+      color: $color-grey;
+    }
+  }
+  
+  .weather-summary {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    
+    .weather-icon {
+      font-size: 2.5rem;
+    }
+    
+    .temperature-range {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      
+      .temp-high {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+        color: $color-danger;
+      }
+      
+      .temp-low {
+        font-size: $font-size-base;
+        color: $color-primary;
+      }
+    }
+  }
+  
+  .conditions-summary {
+    .conditions-text {
+      margin: 0 0 $spacing-xs 0;
+      font-size: $font-size-base;
+      color: $color-dark-grey;
+    }
+    
+    .weather-metrics {
+      display: flex;
+      gap: $spacing-md;
+      
+      .metric {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+        font-size: $font-size-sm;
+        color: $color-grey;
+        
+        svg {
+          font-size: $font-size-sm;
+        }
+        
+        &.rain-chance svg {
+          color: $color-primary;
+        }
+        
+        &.wind svg {
+          color: $color-grey;
+        }
+      }
+    }
+  }
+  
+  .suitability-indicator {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    
+    .suitability-badge {
+      padding: $spacing-xs $spacing-md;
+      border-radius: $radius-full;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      
+      &.excellent {
+        background-color: $color-success;
+        color: $color-white;
+      }
+      
+      &.good {
+        background-color: $color-primary;
+        color: $color-white;
+      }
+      
+      &.fair {
+        background-color: $color-warning;
+        color: $color-white;
+      }
+      
+      &.poor {
+        background-color: $color-danger;
+        color: $color-white;
+      }
+    }
+    
+    .expand-button {
+      padding: $spacing-sm;
+      background: none;
+      border: none;
+      color: $color-grey;
+      cursor: pointer;
+      transition: all $transition-fast;
+      
+      &:hover {
+        color: $color-primary;
+      }
+      
+      svg {
+        transition: transform $transition-base;
+      }
+    }
+  }

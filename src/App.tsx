@@ -12,6 +12,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fad } from '@fortawesome/pro-duotone-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
+import DecisionHelper from './components/DecisionHelper';
 
 // Initialize Font Awesome library
 library.add(fad, fas, far);
@@ -97,7 +98,7 @@ function App() {
             {!loading && !error && weatherData && (
               <>
                 <WeatherComparison />
-                {/* <DecisionHelper /> */}
+                <DecisionHelper />
               </>
             )}
           </main>

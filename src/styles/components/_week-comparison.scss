@@ -1,0 +1,204 @@
+// Week comparison component styles
+// Manages side-by-side weekly weather display
+
+.weather-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $grid-gap;
+    margin-top: $spacing-xl;
+    
+    @include breakpoint(tablet) {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+    }
+    
+    @include breakpoint(mobile) {
+      grid-template-columns: 1fr;
+      gap: $spacing-md;
+      margin-top: $spacing-lg;
+    }
+  }
+  
+  .week-column {
+    @include card($spacing-lg);
+    background-color: $color-white;
+    
+    .week-column-header {
+      margin-bottom: $spacing-lg;
+      padding-bottom: $spacing-md;
+      border-bottom: 2px solid $color-light-grey;
+      
+      .week-label {
+        margin: 0 0 $spacing-xs 0;
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+        color: $color-primary;
+      }
+      
+      .date-range {
+        font-size: $font-size-sm;
+        color: $color-grey;
+        
+        time {
+          font-weight: $font-weight-medium;
+        }
+      }
+    }
+  }
+  
+  .week-view {
+    .daily-weather-grid {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+    }
+    
+    .no-data-message {
+      text-align: center;
+      padding: $spacing-2xl;
+      color: $color-grey;
+      
+      svg {
+        margin-bottom: $spacing-md;
+        opacity: 0.5;
+      }
+      
+      p {
+        margin: 0;
+        font-size: $font-size-base;
+      }
+    }
+  }
+  
+  // Expanded details styling
+  .expanded-details {
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-light-grey;
+    animation: fadeIn 0.3s ease-out;
+    
+    h4 {
+      margin: 0 0 $spacing-sm 0;
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
+      color: $color-dark-grey;
+    }
+  }
+  
+  .time-range-summary {
+    margin-bottom: $spacing-lg;
+    
+    .time-range-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: $spacing-md;
+      margin-top: $spacing-sm;
+      
+      .metric-item {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        padding: $spacing-sm;
+        background-color: $color-light-grey;
+        border-radius: $radius-sm;
+        
+        svg {
+          color: $color-primary;
+        }
+        
+        span {
+          font-size: $font-size-sm;
+          color: $color-dark-grey;
+        }
+      }
+    }
+    
+    .no-data {
+      font-style: italic;
+      color: $color-grey;
+    }
+  }
+  
+  .hourly-forecast {
+    margin-bottom: $spacing-lg;
+    
+    .hourly-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: $spacing-sm;
+      margin-top: $spacing-sm;
+      
+      @include breakpoint(mobile) {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      }
+    }
+    
+    .hourly-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: $spacing-xs;
+      padding: $spacing-sm;
+      background-color: $color-light-grey;
+      border-radius: $radius-sm;
+      text-align: center;
+      
+      .hour-time {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-medium;
+        color: $color-dark-grey;
+      }
+      
+      .hour-icon {
+        font-size: $font-size-lg;
+        color: $color-primary;
+      }
+      
+      .hour-temp {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        color: $color-black;
+      }
+      
+      .hour-precip {
+        font-size: $font-size-xs;
+        color: $color-primary;
+      }
+    }
+  }
+  
+  .suitability-factors {
+    .score {
+      margin: 0 0 $spacing-sm 0;
+      font-size: $font-size-base;
+      color: $color-dark-grey;
+      
+      strong {
+        color: $color-primary;
+        font-size: $font-size-lg;
+      }
+    }
+    
+    .factors-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-sm;
+      
+      .factor {
+        padding: $spacing-xs $spacing-sm;
+        border-radius: $radius-sm;
+        font-size: $font-size-sm;
+        text-transform: capitalize;
+        
+        &.positive {
+          background-color: rgba($color-success, 0.1);
+          color: darken($color-success, 20%);
+        }
+        
+        &.negative {
+          background-color: rgba($color-danger, 0.1);
+          color: darken($color-danger, 20%);
+        }
+      }
+    }
+  }

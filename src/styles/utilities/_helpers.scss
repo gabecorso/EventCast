@@ -1,0 +1,268 @@
+// Utility helper classes
+// Provides reusable utility styles throughout the application
+
+// Display utilities
+.d-none {
+    display: none !important;
+  }
+  
+  .d-block {
+    display: block !important;
+  }
+  
+  .d-inline-block {
+    display: inline-block !important;
+  }
+  
+  .d-flex {
+    display: flex !important;
+  }
+  
+  .d-grid {
+    display: grid !important;
+  }
+  
+  // Flexbox utilities
+  .flex-center {
+    @include flex-center;
+  }
+  
+  .align-items-center {
+    align-items: center !important;
+  }
+  
+  .justify-content-center {
+    justify-content: center !important;
+  }
+  
+  .justify-content-between {
+    justify-content: space-between !important;
+  }
+  
+  .flex-wrap {
+    flex-wrap: wrap !important;
+  }
+  
+  // Spacing utilities
+  @each $prop, $abbrev in (margin: m, padding: p) {
+    @each $size, $length in (
+      0: 0,
+      xs: $spacing-xs,
+      sm: $spacing-sm,
+      md: $spacing-md,
+      lg: $spacing-lg,
+      xl: $spacing-xl,
+      2xl: $spacing-2xl
+    ) {
+      .#{$abbrev}-#{$size} { #{$prop}: $length !important; }
+      .#{$abbrev}t-#{$size} { #{$prop}-top: $length !important; }
+      .#{$abbrev}r-#{$size} { #{$prop}-right: $length !important; }
+      .#{$abbrev}b-#{$size} { #{$prop}-bottom: $length !important; }
+      .#{$abbrev}l-#{$size} { #{$prop}-left: $length !important; }
+      .#{$abbrev}x-#{$size} {
+        #{$prop}-left: $length !important;
+        #{$prop}-right: $length !important;
+      }
+      .#{$abbrev}y-#{$size} {
+        #{$prop}-top: $length !important;
+        #{$prop}-bottom: $length !important;
+      }
+    }
+  }
+  
+  // Text utilities
+  .text-left {
+    text-align: left !important;
+  }
+  
+  .text-center {
+    text-align: center !important;
+  }
+  
+  .text-right {
+    text-align: right !important;
+  }
+  
+  .text-uppercase {
+    text-transform: uppercase !important;
+  }
+  
+  .text-lowercase {
+    text-transform: lowercase !important;
+  }
+  
+  .text-capitalize {
+    text-transform: capitalize !important;
+  }
+  
+  .font-weight-light {
+    font-weight: $font-weight-light !important;
+  }
+  
+  .font-weight-normal {
+    font-weight: $font-weight-regular !important;
+  }
+  
+  .font-weight-medium {
+    font-weight: $font-weight-medium !important;
+  }
+  
+  .font-weight-semibold {
+    font-weight: $font-weight-semibold !important;
+  }
+  
+  .font-weight-bold {
+    font-weight: $font-weight-bold !important;
+  }
+  
+  // Color utilities
+  .text-primary {
+    color: $color-primary !important;
+  }
+  
+  .text-success {
+    color: $color-success !important;
+  }
+  
+  .text-warning {
+    color: $color-warning !important;
+  }
+  
+  .text-danger {
+    color: $color-danger !important;
+  }
+  
+  .text-muted {
+    color: $color-grey !important;
+  }
+  
+  .bg-primary {
+    background-color: $color-primary !important;
+  }
+  
+  .bg-success {
+    background-color: $color-success !important;
+  }
+  
+  .bg-warning {
+    background-color: $color-warning !important;
+  }
+  
+  .bg-danger {
+    background-color: $color-danger !important;
+  }
+  
+  .bg-light {
+    background-color: $color-light-grey !important;
+  }
+  
+  .bg-white {
+    background-color: $color-white !important;
+  }
+  
+  // Border utilities
+  .border {
+    border: 1px solid $color-light-grey !important;
+  }
+  
+  .border-0 {
+    border: 0 !important;
+  }
+  
+  .border-primary {
+    border-color: $color-primary !important;
+  }
+  
+  .rounded {
+    border-radius: $radius-md !important;
+  }
+  
+  .rounded-sm {
+    border-radius: $radius-sm !important;
+  }
+  
+  .rounded-lg {
+    border-radius: $radius-lg !important;
+  }
+  
+  .rounded-circle {
+    border-radius: $radius-full !important;
+  }
+  
+  // Shadow utilities
+  .shadow-sm {
+    box-shadow: $shadow-sm !important;
+  }
+  
+  .shadow {
+    box-shadow: $shadow-md !important;
+  }
+  
+  .shadow-lg {
+    box-shadow: $shadow-lg !important;
+  }
+  
+  .shadow-none {
+    box-shadow: none !important;
+  }
+  
+  // Accessibility utilities
+  .visually-hidden {
+    @include visually-hidden;
+  }
+  
+  .sr-only {
+    @include visually-hidden;
+  }
+  
+  // Responsive utilities
+  @each $breakpoint in mobile, tablet, desktop {
+    @include breakpoint($breakpoint) {
+      .#{$breakpoint}-hide {
+        display: none !important;
+      }
+      
+      .#{$breakpoint}-show {
+        display: block !important;
+      }
+    }
+  }
+  
+  // Transition utilities
+  .transition-none {
+    transition: none !important;
+  }
+  
+  .transition-fast {
+    transition: all $transition-fast !important;
+  }
+  
+  .transition-base {
+    transition: all $transition-base !important;
+  }
+  
+  .transition-slow {
+    transition: all $transition-slow !important;
+  }
+  
+  // Cursor utilities
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+  
+  .cursor-not-allowed {
+    cursor: not-allowed !important;
+  }
+  
+  // Overflow utilities
+  .overflow-hidden {
+    overflow: hidden !important;
+  }
+  
+  .overflow-auto {
+    overflow: auto !important;
+  }
+  
+  .overflow-scroll {
+    overflow: scroll !important;
+  }
