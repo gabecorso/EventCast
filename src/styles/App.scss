@@ -1,0 +1,30 @@
+// Main application stylesheet that imports all partials
+// This file serves as the entry point for our Sass architecture
+
+// Configuration and Variables
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+// @import 'abstracts/functions';
+
+// Base styles and resets
+@import 'base/reset';
+@import 'base/typography';
+// @import 'base/animations';
+
+// Component styles
+// @import 'components/header';
+// @import 'components/weather-card';
+// @import 'components/location-selector';
+// @import 'components/time-selector';
+// @import 'components/week-comparison';
+// @import 'components/loading';
+
+// Layout styles
+@import 'layout/grid';
+// @import 'layout/container';
+
+// Theme variations
+// @import 'themes/weather-conditions';
+
+// Utility classes
+// @import 'utilities/helpers';

@@ -1,0 +1,103 @@
+// Reusable Sass mixins for the weather application
+
+// Responsive breakpoint mixin
+@mixin breakpoint($point) {
+    @if $point == mobile {
+      @media (max-width: $breakpoint-mobile) { @content; }
+    } @else if $point == tablet {
+      @media (min-width: #{$breakpoint-mobile + 1px}) and (max-width: $breakpoint-tablet) { @content; }
+    } @else if $point == desktop {
+      @media (min-width: #{$breakpoint-tablet + 1px}) { @content; }
+    } @else if $point == wide {
+      @media (min-width: $breakpoint-wide) { @content; }
+    }
+  }
+  
+  // Flexbox centering
+  @mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  // Card styling
+  @mixin card($padding: $spacing-md) {
+    background-color: $color-white;
+    border-radius: $radius-md;
+    box-shadow: $shadow-sm;
+    padding: $padding;
+    transition: box-shadow $transition-base;
+    
+    &:hover {
+      box-shadow: $shadow-md;
+    }
+  }
+  
+  // Weather condition theming
+  @mixin weather-theme($condition) {
+    @if $condition == sunny {
+      background: linear-gradient(135deg, $color-sunny 0%, lighten($color-sunny, 15%) 100%);
+      color: $color-dark-grey;
+    } @else if $condition == cloudy {
+      background: linear-gradient(135deg, $color-cloudy 0%, lighten($color-cloudy, 15%) 100%);
+      color: $color-white;
+    } @else if $condition == rainy {
+      background: linear-gradient(135deg, $color-rainy 0%, lighten($color-rainy, 10%) 100%);
+      color: $color-white;
+    } @else if $condition == stormy {
+      background: linear-gradient(135deg, $color-stormy 0%, lighten($color-stormy, 10%) 100%);
+      color: $color-white;
+    }
+  }
+  
+  // Typography mixins
+  @mixin heading($size: $font-size-xl) {
+    font-size: $size;
+    font-weight: $font-weight-semibold;
+    line-height: 1.2;
+    margin-bottom: $spacing-sm;
+  }
+  
+  @mixin body-text($size: $font-size-base) {
+    font-size: $size;
+    font-weight: $font-weight-regular;
+    line-height: 1.6;
+  }
+  
+  // Utility mixins
+  @mixin visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+  
+  // Focus state for accessibility
+  @mixin focus-state {
+    &:focus {
+      outline: 3px solid $color-primary;
+      outline-offset: 2px;
+    }
+    
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+  }
+  
+  // Loading animation
+  @mixin loading-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+  }

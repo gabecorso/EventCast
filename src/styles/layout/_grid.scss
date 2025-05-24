@@ -1,0 +1,148 @@
+// Grid layout system for weather comparison interface
+
+.app-container {
+    min-height: 100vh;
+    background-color: $color-off-white;
+  }
+  
+  .app-header {
+    background-color: $color-white;
+    box-shadow: $shadow-sm;
+    position: sticky;
+    top: 0;
+    z-index: $z-index-dropdown;
+  }
+  
+  .header-content {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: $spacing-md $spacing-lg;
+    
+    @include breakpoint(mobile) {
+      padding: $spacing-sm $spacing-md;
+    }
+  }
+  
+  .header-controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: $spacing-md;
+    align-items: center;
+    
+    @include breakpoint(tablet) {
+      grid-template-columns: 1fr;
+      gap: $spacing-sm;
+    }
+    
+    @include breakpoint(mobile) {
+      grid-template-columns: 1fr;
+      gap: $spacing-sm;
+    }
+  }
+  
+  .main-content {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: $spacing-xl $spacing-lg;
+    
+    @include breakpoint(mobile) {
+      padding: $spacing-md;
+    }
+  }
+  
+  // Weather comparison grid
+  .weather-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $grid-gap;
+    margin-top: $spacing-xl;
+    
+    @include breakpoint(tablet) {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+    }
+    
+    @include breakpoint(mobile) {
+      grid-template-columns: 1fr;
+      gap: $spacing-md;
+    }
+  }
+  
+  .week-column {
+    @include card($spacing-lg);
+    
+    &-header {
+      @include heading($font-size-xl);
+      margin-bottom: $spacing-lg;
+      padding-bottom: $spacing-md;
+      border-bottom: 2px solid $color-light-grey;
+      
+      .week-label {
+        color: $color-primary;
+        font-weight: $font-weight-bold;
+      }
+      
+      .date-range {
+        font-size: $font-size-sm;
+        color: $color-grey;
+        font-weight: $font-weight-regular;
+        margin-top: $spacing-xs;
+      }
+    }
+  }
+  
+  // Daily weather grid within each week
+  .daily-weather-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+  
+  .daily-weather-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    background-color: $color-light-grey;
+    transition: all $transition-base;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: darken($color-light-grey, 5%);
+      transform: translateY(-2px);
+    }
+    
+    &.expanded {
+      background-color: $color-white;
+      box-shadow: $shadow-md;
+    }
+    
+    @include breakpoint(mobile) {
+      grid-template-columns: 80px 1fr;
+      gap: $spacing-sm;
+      
+      .weather-actions {
+        grid-column: 1 / -1;
+        margin-top: $spacing-sm;
+      }
+    }
+  }
+  
+  // Decision helper section
+  .decision-helper {
+    margin-top: $spacing-xl;
+    @include card($spacing-lg);
+    
+    &-header {
+      @include heading($font-size-lg);
+      color: $color-primary-dark;
+      margin-bottom: $spacing-md;
+    }
+    
+    &-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $spacing-md;
+    }
+  }

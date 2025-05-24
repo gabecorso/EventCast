@@ -1,0 +1,134 @@
+// Typography base styles for consistent text rendering across the application
+
+// Heading styles
+h1 {
+    @include heading($font-size-2xl);
+    color: $color-black;
+  }
+  
+  h2 {
+    @include heading($font-size-xl);
+    color: $color-dark-grey;
+  }
+  
+  h3 {
+    @include heading($font-size-lg);
+    color: $color-dark-grey;
+  }
+  
+  h4 {
+    @include heading($font-size-base);
+    color: $color-dark-grey;
+  }
+  
+  // Body text
+  p {
+    @include body-text;
+    color: $color-dark-grey;
+    
+    &.lead {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-light;
+      line-height: 1.7;
+    }
+    
+    &.small {
+      font-size: $font-size-sm;
+    }
+  }
+  
+  // Strong and emphasis
+  strong {
+    font-weight: $font-weight-semibold;
+    color: $color-black;
+  }
+  
+  em {
+    font-style: italic;
+  }
+  
+  // Labels and captions
+  label {
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-dark-grey;
+    margin-bottom: $spacing-xs;
+  }
+  
+  .caption {
+    font-size: $font-size-xs;
+    color: $color-grey;
+    font-weight: $font-weight-regular;
+  }
+  
+  // Application-specific typography
+  .app-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+    
+    h1 {
+      margin: 0;
+      font-size: $font-size-xl;
+      
+      @include breakpoint(mobile) {
+        font-size: $font-size-lg;
+      }
+    }
+    
+    .app-icon {
+      color: $color-primary;
+      font-size: $font-size-2xl;
+    }
+  }
+  
+  // Weather-specific text styles
+  .temperature {
+    font-family: $font-mono;
+    font-weight: $font-weight-medium;
+    
+    &.temp-high {
+      color: $color-danger;
+    }
+    
+    &.temp-low {
+      color: $color-primary;
+    }
+  }
+  
+  .conditions-text {
+    font-size: $font-size-sm;
+    color: $color-dark-grey;
+    margin: $spacing-xs 0;
+  }
+  
+  // Utility text classes
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-right {
+    text-align: right;
+  }
+  
+  .text-muted {
+    color: $color-grey;
+  }
+  
+  .text-primary {
+    color: $color-primary;
+  }
+  
+  .text-success {
+    color: $color-success;
+  }
+  
+  .text-warning {
+    color: $color-warning;
+  }
+  
+  .text-danger {
+    color: $color-danger;
+  }

@@ -1,0 +1,88 @@
+// CSS Reset and base styles for consistent cross-browser rendering
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    font-family: $font-primary;
+    font-size: $font-size-base;
+    line-height: 1.6;
+    color: $color-black;
+    background-color: $color-off-white;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: $font-weight-semibold;
+    line-height: 1.2;
+  }
+  
+  p {
+    margin-bottom: $spacing-md;
+  }
+  
+  a {
+    color: $color-primary;
+    text-decoration: none;
+    transition: color $transition-fast;
+    
+    &:hover {
+      color: $color-primary-dark;
+    }
+  }
+  
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+  
+  input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  // Accessibility improvements
+  :focus {
+    @include focus-state;
+  }
+  
+  // Remove default list styles
+  ul, ol {
+    list-style: none;
+  }
+  
+  // Form reset
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  // Table reset
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
