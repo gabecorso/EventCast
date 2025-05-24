@@ -7,6 +7,14 @@ import { WeatherProvider } from './context/WeatherContext';
 import { WeatherContextType, WeatherData, TimeRange } from './types';
 import weatherService from './services/weatherService';
 import Header from './components/Header';
+import WeatherComparison from './components/WeatherComparison';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fad } from '@fortawesome/pro-duotone-svg-icons';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+
+// Initialize Font Awesome library
+library.add(fad, fas, far);
 
 function App() {
 
@@ -71,6 +79,28 @@ function App() {
     <ErrorBoundary>
       <WeatherProvider value={weatherContextValue}>
         <Header />
+        <main className="main-content">
+            {loading && <LoadingState />}
+            
+            {error && (
+              <div className="error-message">
+                <p>Unable to load weather data: {error}</p>
+                <button 
+                  onClick={refreshWeatherData}
+                  className="button button-primary"
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
+            
+            {!loading && !error && weatherData && (
+              <>
+                <WeatherComparison />
+                {/* <DecisionHelper /> */}
+              </>
+            )}
+          </main>
       </WeatherProvider>
       <LoadingState />
     </ErrorBoundary>
