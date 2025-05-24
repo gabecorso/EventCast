@@ -9,6 +9,9 @@
   ],
   "private": true,
   "dependencies": {
+    "@awesome.me/kit-82257fea91": "^1.0.7",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
@@ -20,6 +23,7 @@
     "axios": "^1.9.0",
     "d3": "^7.9.0",
     "date-fns": "^4.1.0",
+    "font-awesome": "^4.7.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-scripts": "5.0.1",
