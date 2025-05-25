@@ -1,17 +1,41 @@
-// import { useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-// import { useState } from "react";
+/**
+ * Custom hook to detect mobile screen sizes
+ * Returns true if viewport width is less than 768px
+ * Updates on window resize with debouncing for performance
+ */
+const useIsMobile = (): boolean => {
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    // Initialize with current window width to avoid hydration mismatch
+    return typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+  });
 
-// const useIsMobile = () => {
-//     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-    
-//     useEffect(() => {
-//       const handleResize = () => setIsMobile(window.innerWidth < 768);
-//       window.addEventListener('resize', handleResize);
-//       return () => window.removeEventListener('resize', handleResize);
-//     }, []);
-    
-//     return isMobile;
-//   };
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
 
-//   export useIsMobile;
+    const handleResize = () => {
+      // Debounce resize events for better performance
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth < 768);
+      }, 150);
+    };
+
+    // Check initial size
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return isMobile;
+};
+
+export default useIsMobile;

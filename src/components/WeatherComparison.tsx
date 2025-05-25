@@ -4,6 +4,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { format, addDays, startOfWeek } from 'date-fns';
 import { useWeather } from '../context/WeatherContext';
 import WeekView from './WeekView';
+import useIsMobile from '../hooks/useIsMobile';
 
 interface WeatherComparisonProps {
   currentWeekStart: Date;
@@ -26,6 +27,11 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
   const { weatherData, selectedDay, selectedTimeRange } = useWeather();
   const [expandedDay, setExpandedDay] = useState<string | null>(null);
 
+  // Verify that we are on desktop or mobile to change the graph display
+  const isMobile = useIsMobile();
+  const [currentMobileWeek, setCurrentMobileWeek] = useState<'current' | 'next'>('current');
+
+
   /**
    * Handle expansion state for detailed day view
    * Manages accordion-style interaction for hourly weather details
@@ -43,11 +49,31 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
    */
   const handleNavigation = useCallback((direction: 'forward' | 'backward'): void => {
     if (!isNavigating) {
-      onNavigate(direction);
-      // Clear expanded state when navigating to new weeks
-      setExpandedDay(null);
+      if (isMobile) {
+        if (direction === 'forward') {
+          if (currentMobileWeek === 'current') {
+            setCurrentMobileWeek('next');
+          } else {
+            // At 'next' week, load new data
+            onNavigate(direction);
+            setCurrentMobileWeek('current');
+          }
+        } else { // backward
+          if (currentMobileWeek === 'next') {
+            setCurrentMobileWeek('current');
+          } else if (canNavigateBackward) {
+            // At 'current' week, load previous data
+            onNavigate(direction);
+            setCurrentMobileWeek('next'); // Show the 'next' week of previous data
+          }
+        }
+      } else {
+        // Desktop behavior unchanged
+        onNavigate(direction);
+        setExpandedDay(null);
+      }
     }
-  }, [isNavigating, onNavigate]);
+  }, [isNavigating, onNavigate, isMobile, currentMobileWeek, canNavigateBackward]);
 
   if (!weatherData) {
     return null;
@@ -70,7 +96,7 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
         <button
           className={`navigation-arrow navigation-arrow-left ${!canNavigateBackward || isNavigating ? 'disabled' : ''}`}
           onClick={() => handleNavigation('backward')}
-          disabled={!canNavigateBackward || isNavigating}
+          disabled={!canNavigateBackward || isNavigating || (isMobile && currentMobileWeek === 'current' && !canNavigateBackward)}
           aria-label="View previous two weeks"
           title={canNavigateBackward ? `View ${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}` : 'Cannot navigate before today'}
         >
@@ -80,13 +106,48 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
           />
           {!isNavigating && canNavigateBackward && (
             <span className="navigation-preview">
-              {format(previousPeriodStart, 'MMM d')} - {format(previousPeriodEnd, 'MMM d')}
-            </span>
+            {isMobile && currentMobileWeek === 'next' 
+              ? 'This Week' 
+              : `${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}`
+            }
+          </span>
           )}
         </button>
 
-        <div className={`weather-comparison ${isNavigating ? 'navigating' : ''}`}>
-          <div className="week-column" role="region" aria-label="Current week weather">
+        <div className={`weather-comparison ${isNavigating ? 'navigating' : ''} ${isMobile ? 'mobile' : 'desktop'}`}>
+            {isMobile ? 
+            (
+                // Mobile: Single week view
+                <div className="week-column mobile-week" role="region" aria-label={`${currentMobileWeek === 'current' ? 'Current' : 'Next'} week weather`}>
+                  <div className="week-column-header">
+                    <h2 className="week-label">
+                      {currentMobileWeek === 'current' ? 'This Week' : 'Next Week'}
+                    </h2>
+                    <p className="date-range">
+                      <time dateTime={format(currentMobileWeek === 'current' ? currentWeekStart : nextWeekStart, 'yyyy-MM-dd')}>
+                        {format(currentMobileWeek === 'current' ? currentWeekStart : nextWeekStart, 'MMM d')}
+                      </time>
+                      {' - '}
+                      <time dateTime={format(currentMobileWeek === 'current' ? currentWeekEnd : nextWeekEnd, 'yyyy-MM-dd')}>
+                        {format(currentMobileWeek === 'current' ? currentWeekEnd : nextWeekEnd, 'MMM d, yyyy')}
+                      </time>
+                    </p>
+                  </div>
+                  <div className={`week-content ${isNavigating ? 'loading' : ''}`}>
+                    <WeekView
+                      weekData={currentMobileWeek === 'current' ? weatherData.currentWeek : weatherData.nextWeek}
+                      weekType={currentMobileWeek}
+                      selectedDay={selectedDay}
+                      selectedTimeRange={selectedTimeRange}
+                      expandedDay={expandedDay}
+                      onDayExpand={handleDayExpand}
+                    />
+                    {isNavigating && <div className="loading-overlay" />}
+                  </div>
+                </div>
+              ) : (
+                <>
+                <div className="week-column" role="region" aria-label="Current week weather">
             <div className="week-column-header">
               <h2 className="week-label">This Week</h2>
               <p className="date-range">
@@ -137,6 +198,10 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
               {isNavigating && <div className="loading-overlay" />}
             </div>
           </div>
+          </>
+              )
+        }
+          
         </div>
 
         <button
@@ -152,8 +217,11 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
           />
           {!isNavigating && (
             <span className="navigation-preview">
-              {format(nextPeriodStart, 'MMM d')} - {format(nextPeriodEnd, 'MMM d')}
-            </span>
+            {isMobile && currentMobileWeek === 'current'
+              ? 'Next Week'
+              : `${format(nextPeriodStart, 'MMM d')} - ${format(nextPeriodEnd, 'MMM d')}`
+            }
+          </span>
           )}
         </button>
       </div>

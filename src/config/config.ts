@@ -6,7 +6,7 @@ import { Config } from '../types/index';
  */
 const config: Config = {
   // API Configuration
-  VISUAL_CROSSING_API_KEY: process.env.REACT_APP_VISUAL_CROSSING_API_KEY || '3LH2N5GS98VJT2N74GSRJWDH2',
+  VISUAL_CROSSING_API_KEY: process.env.REACT_APP_VISUAL_CROSSING_API_KEY || 'PH4EBA3F8P9S5JW2HRPCKCEGL',
   API_BASE_URL: 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline',
   
   // Default Location
@@ -30,7 +30,7 @@ const config: Config = {
 };
 
 // Validate configuration at runtime, add error for easy reading later when I forget
-if (config.VISUAL_CROSSING_API_KEY === '3LH2N5GS98VJT2N74GSRJWDH2') {
+if (config.VISUAL_CROSSING_API_KEY === 'PH4EBA3F8P9S5JW2HRPCKCEGL') {
   console.warn('Visual Crossing API key not configured. Please set REACT_APP_VISUAL_CROSSING_API_KEY environment variable.');
 }
 
