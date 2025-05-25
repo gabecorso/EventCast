@@ -31,7 +31,7 @@ export interface Temperature {
   }
   
   export interface SuitabilityFactor {
-    type: 'cold' | 'hot' | 'temperature' | 'rain' | 'wind' | 'humidity';
+    type: 'cold' | 'hot' | 'temperature' | 'rain' | 'wind' | 'humidity' | 'dry' | 'sunny' | 'calm';
     impact: 'positive' | 'negative';
   }
   
@@ -53,6 +53,7 @@ export interface Temperature {
     humidity: number;
     hourlyData: HourlyData[];
     suitabilityScore: SuitabilityScore;
+    hasDetailedForecast: boolean;
   }
   
   export interface WeatherData {

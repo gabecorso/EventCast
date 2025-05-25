@@ -11,6 +11,7 @@ import {
 } from '../utils/helpers';
 import { WeekViewProps, DayWeather, TimeRangeAverages } from '../types';
 import WeatherChart from './WeatherChart';
+import SimplifiedWeatherCard from './SimplifiedWeatherCard';
 
 /**
  * WeekView component implementing comprehensive weather data display with TypeScript
@@ -49,6 +50,7 @@ const WeekView: React.FC<WeekViewProps> = ({
     );
 
     return (
+        
       <article 
         key={day.date} 
         className={`daily-weather-item ${weatherCategory} ${isExpanded ? 'expanded' : ''}`}
@@ -147,7 +149,7 @@ const WeekView: React.FC<WeekViewProps> = ({
                   </div>
                 </div>
               ) : (
-                <p className="no-data">No data available for the selected time range</p>
+                <p className="no-data">No data available for the selected time ranges</p>
               )}
             </div>
             
@@ -197,13 +199,13 @@ const WeekView: React.FC<WeekViewProps> = ({
       </article>
     );
   };
-
+  console.log(filteredDays, 'greetings')
   return (
     <div className="week-view">
       {filteredDays.length > 0 ? (
         <>
           {/* Display chart for the selected day's hourly data */}
-          {filteredDays.length === 1 && (
+          {filteredDays.length === 1 && Array.isArray(filteredDays) && filteredDays[0].hourlyData.length > 0 && (
             <WeatherChart
               hourlyData={filteredDays[0].hourlyData}
               selectedTimeRange={selectedTimeRange}
@@ -212,7 +214,13 @@ const WeekView: React.FC<WeekViewProps> = ({
           )}
           
           <div className="daily-weather-grid" role="list">
-            {filteredDays.map((day, index) => renderDayWeather(day, index))}
+            {filteredDays.map((day, index) => (
+                
+                day.hourlyData.length > 0 ?
+                renderDayWeather(day, index)
+                :
+                <SimplifiedWeatherCard day={day} isSelected={false} />
+                ))}
           </div>
         </>
       ) : (

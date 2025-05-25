@@ -46,7 +46,7 @@ function App() {
       const data: WeatherData = await weatherService.getWeatherForecast(
         searchLocation,
         weekStart,
-        14 // Always fetch 2 weeks for comparison
+        28 // Always fetch 4 weeks for comparison
       );
       setWeatherData(data);
       setCurrentWeekStart(weekStart);

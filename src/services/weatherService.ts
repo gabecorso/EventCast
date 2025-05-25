@@ -32,6 +32,7 @@ class WeatherService {
   private cache: Map<string, LocationCache>;
   private readonly cacheTimeout: number;
   private readonly bufferDays: number = 28; // Fetch 4 weeks at a time
+  private readonly detailedForecastDays: number = 15; // Days with hourly data
 
   constructor() {
     this.cache = new Map<string, LocationCache>();
@@ -49,7 +50,7 @@ class WeatherService {
   public async getWeatherForecast(
     location: string, 
     startDate: Date = new Date(),
-    requestedDays: number = 14
+    requestedDays: number = 28
   ): Promise<WeatherData> {
     const normalizedStartDate = startOfDay(startDate);
     const endDate = addDays(normalizedStartDate, requestedDays - 1);
@@ -77,7 +78,7 @@ class WeatherService {
         }
       );
 
-      const processedDays = this.processWeatherData(response.data);
+      const processedDays = this.processWeatherData(response.data, fetchRange.start);
       this.cacheDataForLocation(location, processedDays, fetchRange.start, fetchRange.end);
       
       // Extract requested range from fetched data
@@ -219,32 +220,53 @@ class WeatherService {
 
   /**
    * Process raw API data into application-specific format
-   * Maintains existing transformation logic
+   * Distinguishes between detailed forecast (with hourly) and statistical forecast
    */
-  private processWeatherData(apiData: VisualCrossingAPIResponse): DayWeather[] {
-    return apiData.days.map(day => ({
-      date: day.datetime,
-      dayOfWeek: new Date(day.datetime).getDay(),
-      conditions: day.conditions,
-      icon: this.mapWeatherIcon(day.icon),
-      description: day.description,
-      temperatures: {
-        max: Math.round(day.tempmax),
-        min: Math.round(day.tempmin),
-        average: Math.round(day.temp)
-      },
-      precipitation: {
-        probability: day.precipprob,
-        amount: day.precip
-      },
-      wind: {
-        speed: Math.round(day.windspeed),
-        gust: day.windgust ? Math.round(day.windgust) : null
-      },
-      humidity: day.humidity,
-      hourlyData: this.processHourlyData(day.hours),
-      suitabilityScore: this.calculateSuitabilityScore(day)
-    }));
+  private processWeatherData(apiData: VisualCrossingAPIResponse, fetchStartDate: Date): DayWeather[] {
+    const today = startOfDay(new Date());
+    
+    return apiData.days.map((day, index) => {
+      const dayDate = new Date(day.datetime);
+      const daysFromToday = differenceInDays(dayDate, today);
+      const daysFromFetchStart = differenceInDays(dayDate, fetchStartDate);
+      
+      // Determine if this day should have hourly data
+      // Only include hourly data if within 15 days from today (not from fetch start)
+      const hasHourlyData = (
+        daysFromToday >= 0 &&
+        daysFromToday < this.detailedForecastDays &&
+        Array.isArray(day.hours) &&
+        day.hours.length > 0
+      );
+      
+      
+      return {
+        date: day.datetime,
+        dayOfWeek: dayDate.getDay(),
+        conditions: day.conditions || '',
+        icon: this.mapWeatherIcon(day.icon),
+        description: day.description || '',
+        temperatures: {
+          max: Math.round(day.tempmax),
+          min: Math.round(day.tempmin),
+          average: Math.round(day.temp)
+        },
+        precipitation: {
+          probability: day.precipprob,
+          amount: day.precip
+        },
+        wind: {
+          speed: Math.round(day.windspeed),
+          gust: day.windgust ? Math.round(day.windgust) : null
+        },
+        humidity: day.humidity,
+        hourlyData: hasHourlyData ? this.processHourlyData(day.hours) : [],
+        suitabilityScore: hasHourlyData 
+          ? this.calculateSuitabilityScore(day)
+          : this.calculateDailySuitabilityScore(day),
+        hasDetailedForecast: hasHourlyData
+      };
+    });
   }
 
   /**
@@ -266,7 +288,7 @@ class WeatherService {
 
   /**
    * Calculate comprehensive weather suitability score for outdoor activities
-   * Implements multi-factor analysis with configurable thresholds
+   * Used for days WITH hourly data (detailed forecast)
    * @param dayData - Daily weather data from API
    * @returns Typed suitability score with rating and factors
    */
@@ -314,7 +336,7 @@ class WeatherService {
   }
 
   /**
-   * Calculate suitability score for days without hourly data
+   * Calculate suitability score for days WITHOUT hourly data (statistical forecast)
    * Uses daily averages and statistical data for assessment
    * @param dayData - Daily weather data from API (statistical forecast)
    * @returns Typed suitability score with rating and factors
@@ -340,15 +362,19 @@ class WeatherService {
     if (dayData.precipprob > WEATHER_THRESHOLDS.precipitation.max) {
       score -= 30;
       factors.push({ type: 'rain', impact: 'negative' });
+    } else if (dayData.precipprob < 20) {
+      factors.push({ type: 'dry', impact: 'positive' });
     }
 
     // Wind evaluation using daily average
     if (dayData.windspeed > WEATHER_THRESHOLDS.windSpeed.max) {
       score -= 20;
       factors.push({ type: 'wind', impact: 'negative' });
+    } else if (dayData.windspeed < 10) {
+      factors.push({ type: 'calm', impact: 'positive' });
     }
 
-    // Humidity evaluation - same as hourly
+    // Humidity evaluation - only apply negative impact for extremes
     if (dayData.humidity < WEATHER_THRESHOLDS.humidity.min || 
         dayData.humidity > WEATHER_THRESHOLDS.humidity.max) {
       score -= 10;
@@ -453,6 +479,13 @@ class WeatherService {
       locations: this.cache.size,
       totalEntries
     };
+  }
+
+  /**
+   * Get maximum navigable date (4 weeks from today)
+   */
+  public getMaxNavigableDate(): Date {
+    return addDays(new Date(), this.bufferDays - 1);
   }
 }
 
