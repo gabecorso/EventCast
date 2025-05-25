@@ -1,4 +1,5 @@
 import { HourlyData, TimeRangeAverages, WeatherCategory } from '../types';
+import { format, setDay } from 'date-fns';
 
 /**
  * Utility functions with TypeScript type safety for the weather application
@@ -160,6 +161,31 @@ export function getRelativeDay(dateString: string): string {
   } else {
     return getDayName(date.getDay());
   }
+}
+
+
+export function getTimeOfDayClass(): string {
+    const hour = new Date().getHours();
+    
+    if (hour >= 5 && hour < 12) {
+      return 'time-morning';
+    } else if (hour >= 12 && hour < 18) {
+      return 'time-afternoon';
+    } else {
+      return 'time-evening';
+    }
+};
+
+
+export function getDayNameByNumber(dayNumber: number): string {
+    // Create a reference date (any Sunday works)
+    const referenceDate = new Date(2024, 0, 7); // January 7, 2024 was a Sunday
+    
+    // Set the day of the week
+    const dateWithDay = setDay(referenceDate, dayNumber);
+    
+    // Format to get the day name
+    return format(dateWithDay, 'EEEE'); // 'EEEE' gives full day name
 }
 
 /**

@@ -56,15 +56,16 @@
     }
   }
   
+  
   .day-header {
     display: grid;
-    grid-template-columns: 120px 1fr auto auto;
+    grid-template-columns: auto 1fr auto auto;
     gap: $spacing-md;
     align-items: center;
     cursor: pointer;
     
     @include breakpoint(tablet) {
-      grid-template-columns: 100px 1fr auto;
+      grid-template-columns: 1fr 2fr auto;
       gap: $spacing-sm;
       
       .suitability-indicator {

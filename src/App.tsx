@@ -13,7 +13,8 @@ import { fad } from '@fortawesome/pro-duotone-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import DecisionHelper from './components/DecisionHelper';
-import { startOfDay, addDays, isAfter } from 'date-fns';
+import { startOfDay, addDays, isAfter, getTime } from 'date-fns';
+import { getTimeOfDayClass } from './utils/helpers';
 
 // Initialize Font Awesome library
 library.add(fad, fas, far);
@@ -28,6 +29,7 @@ function App() {
   const [selectedDay, setSelectedDay] = useState<number>(config.DEFAULT_DAY);
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>(config.DEFAULT_TIME_RANGES[1]);
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfDay(new Date()));
+  const [timeOfDayClass, setTimeOfDayClass] = useState(getTimeOfDayClass());
 
 
   const fetchWeatherData = useCallback(async (
@@ -58,6 +60,17 @@ function App() {
       setLoading(false);
       setNavigationLoading(false);
     }
+  }, []);
+
+  //handle theme to time of day
+  useEffect(() => {
+    const updateTimeClass = () => {
+      setTimeOfDayClass(getTimeOfDayClass());
+    };
+  
+    const interval = setInterval(updateTimeClass, 60000); // Check every minute
+    
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -121,6 +134,7 @@ function App() {
   };
   
   return (
+    <div className={`app-container ${timeOfDayClass}`}>
     <ErrorBoundary>
       <WeatherProvider value={weatherContextValue}>
         <Header />
@@ -153,6 +167,7 @@ function App() {
           </main>
       </WeatherProvider>
     </ErrorBoundary>
+    </div>
   );
 }
 

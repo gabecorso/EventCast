@@ -69,64 +69,54 @@ const WeekView: React.FC<WeekViewProps> = ({
           }}
           aria-label={`Weather for ${getRelativeDay(day.date)}. Click to ${isExpanded ? 'collapse' : 'expand'} details`}
         >
-          <div className="date-info">
-            <span className="day-name">{getRelativeDay(day.date)}</span>
-            <time className="date" dateTime={day.date}>
-              {format(new Date(day.date), 'MMM d')}
-            </time>
-          </div>
+            {!isExpanded && (
+                <>
+                    
+                <div className="date-info">
+                    <span className="day-name">{getRelativeDay(day.date)}</span>
+                    <time className="date" dateTime={day.date}>
+                    {format(new Date(day.date), 'MMM d')}
+                    </time>
+                </div>
           
-          <div className="weather-summary">
-            <FontAwesomeIcon 
-              icon={['fas', day.icon] as IconProp} 
-              className="weather-icon"
-              size="2x"
-              aria-label={day.conditions}
-            />
-            <div className="temperature-range">
-              <span className="temp-high" aria-label="High temperature">
-                {formatTemperature(day.temperatures.max)}
-              </span>
-              <span className="temp-low" aria-label="Low temperature">
-                {formatTemperature(day.temperatures.min)}
-              </span>
-            </div>
-          </div>
+                <div className="weather-summary">
+                    <FontAwesomeIcon 
+                    icon={['fas', day.icon] as IconProp} 
+                    className="weather-icon"
+                    size="2x"
+                    aria-label={day.conditions}
+                    />
+                    <div className="temperature-range">
+                    <span className="temp-high" aria-label="High temperature">
+                        {formatTemperature(day.temperatures.max)}
+                    </span>
+                    <span className="temp-low" aria-label="Low temperature">
+                        {formatTemperature(day.temperatures.min)}
+                    </span>
+                    </div>
+                </div>
           
-          <div className="conditions-summary">
-            <p className="conditions-text">{day.conditions}</p>
-            <div className="weather-metrics">
-              {day.precipitation.probability > 0 && (
-                <span className="metric rain-chance" aria-label="Chance of rain">
-                  <FontAwesomeIcon icon={['fas', 'tint'] as IconProp} />
-                  {day.precipitation.probability}%
-                </span>
-              )}
-              <span className="metric wind" aria-label="Wind speed">
-                <FontAwesomeIcon icon={['fas', 'wind'] as IconProp} />
-                {day.wind.speed} mph
-              </span>
-            </div>
-          </div>
+                <div className="suitability-indicator">
+                    <div 
+                    className={`suitability-badge ${day.suitabilityScore.rating}`}
+                    role="status"
+                    aria-label={`Weather suitability: ${day.suitabilityScore.rating}`}
+                    >
+                    {day.suitabilityScore.rating.charAt(0).toUpperCase() + day.suitabilityScore.rating.slice(1)}
+                    </div>
+                    <button 
+                    className="expand-button float-right"
+                    aria-label={isExpanded ? 'Collapse details' : 'Expand details'}
+                    onClick={(e) => e.stopPropagation()}
+                    >
+                    <FontAwesomeIcon 
+                        icon={['fas', isExpanded ? 'chevron-up' : 'chevron-down'] as IconProp} 
+                    />
+                    </button>
+                </div>
+          </>
+            )}
           
-          <div className="suitability-indicator">
-            <div 
-              className={`suitability-badge ${day.suitabilityScore.rating}`}
-              role="status"
-              aria-label={`Weather suitability: ${day.suitabilityScore.rating}`}
-            >
-              {day.suitabilityScore.rating.charAt(0).toUpperCase() + day.suitabilityScore.rating.slice(1)}
-            </div>
-            <button 
-              className="expand-button"
-              aria-label={isExpanded ? 'Collapse details' : 'Expand details'}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <FontAwesomeIcon 
-                icon={['fas', isExpanded ? 'chevron-up' : 'chevron-down'] as IconProp} 
-              />
-            </button>
-          </div>
         </header>
         
         {isExpanded && (
@@ -203,6 +193,16 @@ const WeekView: React.FC<WeekViewProps> = ({
     <div className="week-view">
       {filteredDays.length > 0 ? (
         <>
+
+        <div className="daily-weather-grid" role="list">
+            {filteredDays.map((day, index) => (
+                
+                day.hourlyData.length > 0 ?
+                renderDayWeather(day, index)
+                :
+                <SimplifiedWeatherCard day={day} isSelected={false} />
+                ))}
+          </div>
           {/* Display chart for the selected day's hourly data */}
           {filteredDays.length === 1 && Array.isArray(filteredDays) && filteredDays[0].hourlyData.length > 0 && (
             <WeatherChart
@@ -212,15 +212,7 @@ const WeekView: React.FC<WeekViewProps> = ({
             />
           )}
           
-          <div className="daily-weather-grid" role="list">
-            {filteredDays.map((day, index) => (
-                
-                day.hourlyData.length > 0 ?
-                renderDayWeather(day, index)
-                :
-                <SimplifiedWeatherCard day={day} isSelected={false} />
-                ))}
-          </div>
+          
         </>
       ) : (
         <div className="no-data-message" role="status">

@@ -27,7 +27,7 @@ const Header: React.FC = () => {
             className="app-icon" 
             aria-hidden="true"
           />
-          <h1>Weather Planner for Outdoor Meetups</h1>
+          <h1>Event Cast</h1>
         </div>
         
         <nav className="header-controls" role="navigation" aria-label="Weather controls">

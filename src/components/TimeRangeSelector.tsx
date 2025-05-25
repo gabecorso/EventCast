@@ -68,8 +68,7 @@ const TimeRangeSelector: React.FC = () => {
       </select>
       <div id="time-range-info" className="time-range-info">
         <p className="info-text">
-          Weather conditions will be averaged for the selected hours to provide 
-          representative data for your planned meetup timeframe
+          Weather conditions will be averaged
         </p>
       </div>
     </div>

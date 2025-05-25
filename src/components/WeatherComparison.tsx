@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { format, addDays, startOfWeek } from 'date-fns';
+import { format, addDays, startOfWeek, isSameWeek, isAfter } from 'date-fns';
 import { useWeather } from '../context/WeatherContext';
 import WeekView from './WeekView';
 import useIsMobile from '../hooks/useIsMobile';
+import { getDayNameByNumber } from '../utils/helpers';
 
 interface WeatherComparisonProps {
   currentWeekStart: Date;
@@ -80,9 +81,21 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
   }
 
   // Calculate date ranges for display
+  const today = new Date();
+  const todayWeekStart = startOfWeek(today);
+  const nextWeekFromToday = addDays(todayWeekStart, 7);
   const currentWeekEnd = addDays(currentWeekStart, 6);
   const nextWeekStart = addDays(currentWeekStart, 7);
   const nextWeekEnd = addDays(nextWeekStart, 6);
+
+  //dynamic labeling for when navigating ahead multiple weeks
+  const weekLabel = isSameWeek(currentWeekStart, today) 
+  ? 'This Week' 
+  : `${getDayNameByNumber(selectedDay)}`;
+
+  const nextWeekLabel = isSameWeek(nextWeekStart, nextWeekFromToday) 
+  ? 'Next Week' 
+  : `${getDayNameByNumber(selectedDay)}`;
 
   // Calculate navigation preview dates
   const previousPeriodStart = addDays(currentWeekStart, -14);
@@ -99,6 +112,8 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
   const backButtonTitle = isMobile 
   ? (currentMobileWeek === 'next' ? 'Go back to this week' : (canNavigateBackward ? `View ${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}` : 'Cannot navigate before today'))
   : (canNavigateBackward ? `View ${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}` : 'Cannot navigate before today');
+
+  
 
   return (
     <section className="weather-comparison-wrapper" aria-label="Weekly weather comparison">
@@ -159,7 +174,7 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
                 <>
                 <div className="week-column" role="region" aria-label="Current week weather">
             <div className="week-column-header">
-              <h2 className="week-label">This Week</h2>
+              <h2 className="week-label">{weekLabel}</h2>
               <p className="date-range">
                 <time dateTime={format(currentWeekStart, 'yyyy-MM-dd')}>
                   {format(currentWeekStart, 'MMM d')}
@@ -185,7 +200,7 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
 
           <div className="week-column" role="region" aria-label="Next week weather">
             <div className="week-column-header">
-              <h2 className="week-label">Next Week</h2>
+              <h2 className="week-label">{nextWeekLabel}</h2>
               <p className="date-range">
                 <time dateTime={format(nextWeekStart, 'yyyy-MM-dd')}>
                   {format(nextWeekStart, 'MMM d')}
