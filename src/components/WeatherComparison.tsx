@@ -90,15 +90,27 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
   const nextPeriodStart = addDays(currentWeekStart, 14);
   const nextPeriodEnd = addDays(currentWeekStart, 27);
 
+  //check to make sure backwards navigation is possible, when on mobile we need to allow going back after switching to the second graph
+  // as desktop loads two graphs at once
+  const canGoBack = isMobile 
+  ? (currentMobileWeek === 'next' || canNavigateBackward)
+  : canNavigateBackward;
+
+  const backButtonTitle = isMobile 
+  ? (currentMobileWeek === 'next' ? 'Go back to this week' : (canNavigateBackward ? `View ${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}` : 'Cannot navigate before today'))
+  : (canNavigateBackward ? `View ${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}` : 'Cannot navigate before today');
+
+  console.log(canGoBack, isMobile, currentMobileWeek)
+
   return (
     <section className="weather-comparison-wrapper" aria-label="Weekly weather comparison">
       <div className="navigation-controls">
         <button
-          className={`navigation-arrow navigation-arrow-left ${!canNavigateBackward || isNavigating ? 'disabled' : ''}`}
+          className={`navigation-arrow navigation-arrow-left ${!canGoBack || isNavigating ? 'disabled' : ''}`}
           onClick={() => handleNavigation('backward')}
-          disabled={!canNavigateBackward || isNavigating || (isMobile && currentMobileWeek === 'current' && !canNavigateBackward)}
-          aria-label="View previous two weeks"
-          title={canNavigateBackward ? `View ${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}` : 'Cannot navigate before today'}
+          disabled={isNavigating || !canGoBack}    
+          aria-label={isMobile ? "View previous week" : "View previous two weeks"}
+          title={backButtonTitle}
         >
           <FontAwesomeIcon 
             icon={['fas', isNavigating ? 'spinner' : 'chevron-left'] as IconProp} 
