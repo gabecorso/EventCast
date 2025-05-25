@@ -271,12 +271,7 @@
   }
   
   .week-view {
-    .daily-weather-grid {
-      display: flex;
-      flex-direction: column;
-      gap: $spacing-md;
-      margin-bottom: $spacing-md;
-    }
+   
     
     .no-data-message {
       text-align: center;

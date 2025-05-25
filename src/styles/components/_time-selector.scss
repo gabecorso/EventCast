@@ -59,6 +59,10 @@
 .time-range-info {
   margin-top: $spacing-xs;
   
+  @include breakpoint(mobile) {
+    display: none;
+  }
+  
   .preview-text,
   .info-text {
     margin: 0;

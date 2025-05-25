@@ -65,9 +65,24 @@
     }
     
     @include breakpoint(mobile) {
-      grid-template-columns: 1fr;
-      gap: $spacing-sm;
-    }
+        grid-template-columns: 1fr 2fr; // Two columns for date and time
+        gap: $spacing-sm;
+        
+        // Location search takes full width
+        .location-selector {
+          grid-column: 1 / -1; // Span both columns
+          order: -1; // Place it first
+        }
+        
+        // Day selector and time range share a row
+        .day-selector {
+          grid-column: 1;
+        }
+        
+        .time-range-selector {
+          grid-column: 2;
+        }
+      }
   }
   
   .header-summary {

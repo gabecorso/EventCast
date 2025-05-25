@@ -26,18 +26,34 @@
   .header-controls {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    gap: $spacing-md;
-    align-items: center;
+    gap: $spacing-lg;
+    align-items: start;
     
     @include breakpoint(tablet) {
       grid-template-columns: 1fr;
-      gap: $spacing-sm;
+      gap: $spacing-md;
     }
     
     @include breakpoint(mobile) {
-      grid-template-columns: 1fr;
-      gap: $spacing-sm;
-    }
+        grid-template-columns: 1fr 2fr; // Two columns for date and time
+        gap: $spacing-sm;
+        
+        // Location search takes full width
+        .location-selector {
+          margin-top: 0px;
+          grid-column: 1 / -1; // Span both columns
+          order: -1; // Place it first
+        }
+        
+        // Day selector and time range share a row
+        .day-selector {
+          grid-column: 1;
+        }
+        
+        .time-range-selector {
+          grid-column: 2;
+        }
+      }
   }
   
   .main-content {
@@ -96,11 +112,15 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: $spacing-md;
+    margin-bottom: $spacing-md;
+    @include breakpoint(mobile) {
+        gap: $spacing-sm;
+      }
   }
   
   .daily-weather-item {
     display: grid;
-    grid-template-columns: 100px 1fr auto;
+    grid-template-columns: minmax(90px, 1fr) 2fr auto;
     gap: $spacing-md;
     padding: $spacing-md;
     border-radius: $radius-md;
@@ -117,10 +137,17 @@
       background-color: $color-white;
       box-shadow: $shadow-md;
     }
+
+    @include breakpoint(tablet) {
+        grid-template-columns: minmax(80px, 0.5fr) 1fr auto;
+        gap: $spacing-sm;
+      }
     
     @include breakpoint(mobile) {
-      grid-template-columns: 80px 1fr;
-      gap: $spacing-sm;
+      
+      grid-template-columns: 1fr 2fr; // More flexible layout
+      gap: $spacing-xs;
+      padding: $spacing-sm;
       
       .weather-actions {
         grid-column: 1 / -1;
