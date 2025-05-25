@@ -116,7 +116,7 @@ const SimplifiedWeatherCard: React.FC<SimplifiedWeatherCardProps> = ({ day, isSe
 
       <div className="statistical-notice">
         <FontAwesomeIcon icon={['fas', 'chart-line'] as IconProp} className="notice-icon" />
-        <span className="notice-text">Statistical forecast</span>
+        <span className="caption">*Detailed statistical forecast unavailable more than 14 days in the future</span>
       </div>
     </article>
   );
