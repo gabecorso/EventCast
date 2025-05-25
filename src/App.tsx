@@ -13,6 +13,7 @@ import { fad } from '@fortawesome/pro-duotone-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import DecisionHelper from './components/DecisionHelper';
+import { startOfDay, addDays, isAfter } from 'date-fns';
 
 // Initialize Font Awesome library
 library.add(fad, fas, far);
@@ -21,34 +22,52 @@ function App() {
 
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [navigationLoading, setNavigationLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [location, setLocation] = useState<string>(config.DEFAULT_LOCATION);
   const [selectedDay, setSelectedDay] = useState<number>(config.DEFAULT_DAY);
-  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>(config.DEFAULT_TIME_RANGES[1]); // Afternoon by default
+  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>(config.DEFAULT_TIME_RANGES[1]);
+  const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfDay(new Date()));
 
 
-  const fetchWeatherData = useCallback(async (searchLocation: string): Promise<void> => {
-    setLoading(true);
+  const fetchWeatherData = useCallback(async (
+    searchLocation: string, 
+    weekStart: Date,
+    isNavigation: boolean = false
+  ): Promise<void> => {
+    if (isNavigation) {
+      setNavigationLoading(true);
+    } else {
+      setLoading(true);
+    }
     setError(null);
     
     try {
-      const data: WeatherData = await weatherService.getWeatherForecast(searchLocation);
+      const data: WeatherData = await weatherService.getWeatherForecast(
+        searchLocation,
+        weekStart,
+        14 // Always fetch 2 weeks for comparison
+      );
       setWeatherData(data);
+      setCurrentWeekStart(weekStart);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch weather data';
       setError(errorMessage);
       console.error('Weather fetch error:', err);
     } finally {
       setLoading(false);
+      setNavigationLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchWeatherData(location);
-  }, [location, fetchWeatherData]);
+    fetchWeatherData(location, currentWeekStart, false);
+  }, [location]); // Only refetch on location change, not weekStart
 
   const handleLocationChange = useCallback((newLocation: string): void => {
     setLocation(newLocation);
+    // Reset to current week when location changes
+    setCurrentWeekStart(startOfDay(new Date()));
   }, []);
 
   const handleDayChange = useCallback((newDay: number): void => {
@@ -60,8 +79,33 @@ function App() {
   }, []);
 
   const refreshWeatherData = useCallback((): void => {
-    fetchWeatherData(location);
-  }, [location, fetchWeatherData]);
+    weatherService.clearLocationCache(location);
+    fetchWeatherData(location, currentWeekStart, false);
+  }, [location, currentWeekStart, fetchWeatherData]);
+
+  const navigateWeeks = useCallback((direction: 'forward' | 'backward'): void => {
+    const newStart = direction === 'forward' 
+      ? addDays(currentWeekStart, 14)
+      : addDays(currentWeekStart, -14);
+    
+    // Prevent navigating before today
+    const today = startOfDay(new Date());
+    if (!isAfter(newStart, today) && direction === 'backward') {
+      const adjustedStart = today;
+      if (adjustedStart.getTime() !== currentWeekStart.getTime()) {
+        fetchWeatherData(location, adjustedStart, true);
+      }
+    } else {
+      fetchWeatherData(location, newStart, true);
+    }
+  }, [currentWeekStart, location, fetchWeatherData]);
+
+  const canNavigateBackward = useCallback((): boolean => {
+    const today = startOfDay(new Date());
+    const twoWeeksBack = addDays(currentWeekStart, -14);
+    return isAfter(twoWeeksBack, today) || 
+           twoWeeksBack.getTime() === today.getTime();
+  }, [currentWeekStart]);
 
   const weatherContextValue: WeatherContextType = {
     weatherData,
@@ -97,7 +141,12 @@ function App() {
             
             {!loading && !error && weatherData && (
               <>
-                <WeatherComparison />
+                 <WeatherComparison 
+                  currentWeekStart={currentWeekStart}
+                  onNavigate={navigateWeeks}
+                  canNavigateBackward={canNavigateBackward()}
+                  isNavigating={navigationLoading}
+                />
                 <DecisionHelper />
               </>
             )}
