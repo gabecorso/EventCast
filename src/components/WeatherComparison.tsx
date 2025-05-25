@@ -3,6 +3,7 @@ import { format, addDays, startOfWeek } from 'date-fns';
 import { useWeather } from '../context/WeatherContext';
 import WeekView from './WeekView';
 
+
 /**
  * WeatherComparison component implementing side-by-side weather visualization
  * Facilitates comparative analysis between current and following week weather conditions

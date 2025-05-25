@@ -59,7 +59,7 @@ const WeekView: React.FC<WeekViewProps> = ({
           onClick={() => onDayExpand(weekType, index)}
           role="button"
           tabIndex={0}
-          onKeyPress={(e) => {
+          onKeyUp={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               onDayExpand(weekType, index);

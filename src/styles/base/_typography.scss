@@ -1,134 +1,286 @@
 // Typography base styles for consistent text rendering across the application
 
+// Google Fonts Import
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700&family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap');
+
+// Heading styles
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  font-weight: $font-weight-semibold;
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+}
+
+h1 {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $color-black;
+}
+
+h2 {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-dark-grey;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+h3 {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-dark-grey;
+}
+
+h4 {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-dark-grey;
+}
+
+// Body text
+body {
+  font-family: $font-body;
+  font-weight: $font-weight-regular;
+}
+
+p {
+  font-family: $font-body;
+  font-size: $font-size-base;
+  font-weight: $font-weight-regular;
+  line-height: 1.6;
+  color: $color-dark-grey;
+  
+  &.lead {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-regular;
+    line-height: 1.7;
+  }
+  
+  &.small {
+    font-size: $font-size-sm;
+  }
+}
+
+// Strong and emphasis
+strong {
+  font-weight: $font-weight-medium;
+  color: $color-black;
+}
+
+em {
+  font-style: italic;
+}
+
+// Labels and UI elements
+label, 
+.button,
+.day-selector-dropdown,
+.time-range-dropdown,
+.location-input {
+  font-family: $font-body;
+  font-weight: $font-weight-regular;
+}
+
+.caption {
+  font-family: $font-body;
+  font-size: $font-size-xs;
+  color: $color-grey;
+  font-weight: $font-weight-regular;
+}
+
+// Application-specific typography
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  
+  h1 {
+    margin: 0;
+    font-size: $font-size-xl;
+    font-family: $font-heading;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.5px;
+    
+    @include breakpoint(mobile) {
+      font-size: $font-size-lg;
+    }
+  }
+  
+  .app-icon {
+    color: $color-primary;
+    font-size: $font-size-2xl;
+  }
+}
+
+// Data-specific typography (temperatures, percentages, metrics)
+.temperature,
+.temp-high,
+.temp-low,
+.hour-temp,
+.metric,
+.score,
+.suitability-badge {
+  font-family: $font-data;
+  font-weight: $font-weight-medium;
+}
+
+.temperature {
+  &.temp-high {
+    color: $color-danger;
+    font-weight: $font-weight-semibold;
+  }
+  
+  &.temp-low {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+// Weather metrics styling
+.weather-metrics .metric {
+  font-family: $font-data;
+  font-weight: $font-weight-medium;
+}
+
+// Suitability badge with uppercase
+.suitability-badge {
+  text-transform: uppercase;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.5px;
+}
+
+// Score d// Typography base styles for consistent text rendering across the application
+
 // Heading styles
 h1 {
-    @include heading($font-size-2xl);
-    color: $color-black;
+  @include heading($font-size-2xl);
+  color: $color-black;
+}
+
+h2 {
+  @include heading($font-size-xl);
+  color: $color-dark-grey;
+}
+
+h3 {
+  @include heading($font-size-lg);
+  color: $color-dark-grey;
+}
+
+h4 {
+  @include heading($font-size-base);
+  color: $color-dark-grey;
+}
+
+// Body text
+p {
+  @include body-text;
+  color: $color-dark-grey;
+  
+  &.lead {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-light;
+    line-height: 1.7;
   }
   
-  h2 {
-    @include heading($font-size-xl);
-    color: $color-dark-grey;
+  &.small {
+    font-size: $font-size-sm;
   }
+}
+
+// Strong and emphasis
+strong {
+  font-weight: $font-weight-semibold;
+  color: $color-black;
+}
+
+em {
+  font-style: italic;
+}
+
+// Labels and captions
+label {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-dark-grey;
+  margin-bottom: $spacing-xs;
+}
+
+.caption {
+  font-size: $font-size-xs;
+  color: $color-grey;
+  font-weight: $font-weight-regular;
+}
+
+// Application-specific typography
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
   
-  h3 {
-    @include heading($font-size-lg);
-    color: $color-dark-grey;
-  }
-  
-  h4 {
-    @include heading($font-size-base);
-    color: $color-dark-grey;
-  }
-  
-  // Body text
-  p {
-    @include body-text;
-    color: $color-dark-grey;
+  h1 {
+    margin: 0;
+    font-size: $font-size-xl;
     
-    &.lead {
+    @include breakpoint(mobile) {
       font-size: $font-size-lg;
-      font-weight: $font-weight-light;
-      line-height: 1.7;
-    }
-    
-    &.small {
-      font-size: $font-size-sm;
     }
   }
   
-  // Strong and emphasis
-  strong {
-    font-weight: $font-weight-semibold;
-    color: $color-black;
-  }
-  
-  em {
-    font-style: italic;
-  }
-  
-  // Labels and captions
-  label {
-    display: block;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: $color-dark-grey;
-    margin-bottom: $spacing-xs;
-  }
-  
-  .caption {
-    font-size: $font-size-xs;
-    color: $color-grey;
-    font-weight: $font-weight-regular;
-  }
-  
-  // Application-specific typography
-  .app-title {
-    display: flex;
-    align-items: center;
-    gap: $spacing-md;
-    margin-bottom: $spacing-lg;
-    
-    h1 {
-      margin: 0;
-      font-size: $font-size-xl;
-      
-      @include breakpoint(mobile) {
-        font-size: $font-size-lg;
-      }
-    }
-    
-    .app-icon {
-      color: $color-primary;
-      font-size: $font-size-2xl;
-    }
-  }
-  
-  // Weather-specific text styles
-  .temperature {
-    font-family: $font-mono;
-    font-weight: $font-weight-medium;
-    
-    &.temp-high {
-      color: $color-danger;
-    }
-    
-    &.temp-low {
-      color: $color-primary;
-    }
-  }
-  
-  .conditions-text {
-    font-size: $font-size-sm;
-    color: $color-dark-grey;
-    margin: $spacing-xs 0;
-  }
-  
-  // Utility text classes
-  .text-center {
-    text-align: center;
-  }
-  
-  .text-right {
-    text-align: right;
-  }
-  
-  .text-muted {
-    color: $color-grey;
-  }
-  
-  .text-primary {
+  .app-icon {
     color: $color-primary;
+    font-size: $font-size-2xl;
   }
+}
+
+// Weather-specific text styles
+.temperature {
+  font-family: $font-mono;
+  font-weight: $font-weight-medium;
   
-  .text-success {
-    color: $color-success;
-  }
-  
-  .text-warning {
-    color: $color-warning;
-  }
-  
-  .text-danger {
+  &.temp-high {
     color: $color-danger;
   }
+  
+  &.temp-low {
+    color: $color-primary;
+  }
+}
+
+.conditions-text {
+  font-size: $font-size-sm;
+  color: $color-dark-grey;
+  margin: $spacing-xs 0;
+}
+
+// Utility text classes
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-muted {
+  color: $color-grey;
+}
+
+.text-primary {
+  color: $color-primary;
+}
+
+.text-success {
+  color: $color-success;
+}
+
+.text-warning {
+  color: $color-warning;
+}
+
+.text-danger {
+  color: $color-danger;
+}
