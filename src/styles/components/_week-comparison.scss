@@ -1,11 +1,119 @@
 // Week comparison component styles
-// Manages side-by-side weekly weather display
+// Manages side-by-side weekly weather display with navigation controls
 
-.weather-comparison {
+.weather-comparison-wrapper {
+    position: relative;
+    margin-top: $spacing-xl;
+  }
+  
+  .navigation-controls {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-lg;
+    
+    @include breakpoint(tablet) {
+      gap: $spacing-md;
+    }
+    
+    @include breakpoint(mobile) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $spacing-sm;
+    }
+  }
+  
+  // Navigation arrow buttons
+  .navigation-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-md;
+    background-color: $color-white;
+    border: 2px solid $color-light-grey;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-base;
+    min-width: 60px;
+    
+    &:hover:not(.disabled) {
+      border-color: $color-primary;
+      background-color: lighten($color-primary, 45%);
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+      
+      .navigation-preview {
+        opacity: 1;
+      }
+    }
+    
+    &:active:not(.disabled) {
+      transform: translateY(0);
+    }
+    
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      
+      &:hover {
+        transform: none;
+        background-color: $color-white;
+        border-color: $color-light-grey;
+      }
+    }
+    
+    svg {
+      font-size: $font-size-xl;
+      color: $color-primary;
+      transition: color $transition-fast;
+    }
+    
+    &.navigation-arrow-left {
+      align-self: center;
+      
+      @include breakpoint(mobile) {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    &.navigation-arrow-right {
+      align-self: center;
+      
+      @include breakpoint(mobile) {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        order: 3;
+      }
+    }
+    
+    .navigation-preview {
+      font-size: $font-size-xs;
+      color: $color-grey;
+      text-align: center;
+      opacity: 0;
+      transition: opacity $transition-base;
+      white-space: nowrap;
+      font-family: $font-body;
+      
+      @include breakpoint(tablet) {
+        display: none;
+      }
+    }
+  }
+  
+  .weather-comparison {
+    flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: $grid-gap;
-    margin-top: $spacing-xl;
+    transition: opacity $transition-base;
+    
+    &.navigating {
+      opacity: 0.8;
+    }
     
     @include breakpoint(tablet) {
       grid-template-columns: 1fr;
@@ -13,15 +121,17 @@
     }
     
     @include breakpoint(mobile) {
+      order: 2;
       grid-template-columns: 1fr;
       gap: $spacing-md;
-      margin-top: $spacing-lg;
     }
   }
   
   .week-column {
     @include card($spacing-lg);
     background-color: $color-white;
+    position: relative;
+    overflow: hidden;
     
     .week-column-header {
       margin-bottom: $spacing-lg;
@@ -33,16 +143,106 @@
         font-size: $font-size-xl;
         font-weight: $font-weight-bold;
         color: $color-primary;
+        font-family: $font-heading;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
       
       .date-range {
         font-size: $font-size-sm;
         color: $color-grey;
+        font-family: $font-body;
         
         time {
           font-weight: $font-weight-medium;
         }
       }
+    }
+  }
+  
+  // Week content with loading overlay
+  .week-content {
+    position: relative;
+    transition: opacity $transition-base;
+    
+    &.loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba($color-white, 0.8) 0%,
+        rgba($color-white, 0.6) 50%,
+        rgba($color-white, 0.8) 100%
+      );
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      &::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        border: 3px solid $color-light-grey;
+        border-top-color: $color-primary;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+  
+  // Navigation progress indicator
+  .navigation-progress {
+    position: absolute;
+    top: -$spacing-md;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 20;
+    
+    .progress-bar {
+      height: 4px;
+      background-color: $color-light-grey;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: $spacing-xs;
+      
+      .progress-fill {
+        height: 100%;
+        background-color: $color-primary;
+        width: 0;
+        animation: progress-loading 1.5s ease-in-out infinite;
+      }
+    }
+    
+    .progress-text {
+      font-size: $font-size-xs;
+      color: $color-grey;
+      margin: 0;
+      font-family: $font-body;
+    }
+  }
+  
+  @keyframes progress-loading {
+    0% {
+      width: 0;
+      transform: translateX(0);
+    }
+    50% {
+      width: 70%;
+      transform: translateX(0);
+    }
+    100% {
+      width: 100%;
+      transform: translateX(100%);
     }
   }
   
@@ -66,6 +266,7 @@
       p {
         margin: 0;
         font-size: $font-size-base;
+        font-family: $font-body;
       }
     }
   }

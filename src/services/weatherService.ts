@@ -314,6 +314,56 @@ class WeatherService {
   }
 
   /**
+   * Calculate suitability score for days without hourly data
+   * Uses daily averages and statistical data for assessment
+   * @param dayData - Daily weather data from API (statistical forecast)
+   * @returns Typed suitability score with rating and factors
+   */
+  private calculateDailySuitabilityScore(dayData: VisualCrossingDay): SuitabilityScore {
+    const { WEATHER_THRESHOLDS } = config;
+    let score = 100;
+    const factors: SuitabilityFactor[] = [];
+
+    // Temperature evaluation using daily high/low
+    if (dayData.tempmax < WEATHER_THRESHOLDS.temperature.min) {
+      score -= 25; // Slightly higher penalty for daily assessment
+      factors.push({ type: 'cold', impact: 'negative' });
+    } else if (dayData.tempmax > WEATHER_THRESHOLDS.temperature.max) {
+      score -= 20;
+      factors.push({ type: 'hot', impact: 'negative' });
+    } else if (dayData.tempmin >= WEATHER_THRESHOLDS.temperature.min - 5 && 
+               dayData.tempmax <= WEATHER_THRESHOLDS.temperature.max + 5) {
+      factors.push({ type: 'temperature', impact: 'positive' });
+    }
+
+    // Precipitation evaluation - same as hourly
+    if (dayData.precipprob > WEATHER_THRESHOLDS.precipitation.max) {
+      score -= 30;
+      factors.push({ type: 'rain', impact: 'negative' });
+    }
+
+    // Wind evaluation using daily average
+    if (dayData.windspeed > WEATHER_THRESHOLDS.windSpeed.max) {
+      score -= 20;
+      factors.push({ type: 'wind', impact: 'negative' });
+    }
+
+    // Humidity evaluation - same as hourly
+    if (dayData.humidity < WEATHER_THRESHOLDS.humidity.min || 
+        dayData.humidity > WEATHER_THRESHOLDS.humidity.max) {
+      score -= 10;
+      factors.push({ type: 'humidity', impact: 'negative' });
+    }
+
+    const finalScore = Math.max(0, score);
+    return {
+      score: finalScore,
+      rating: this.getRatingFromScore(finalScore),
+      factors
+    };
+  }
+
+  /**
    * Convert numeric score to qualitative rating with type safety
    * @param score - Numeric suitability score (0-100)
    * @returns Typed rating category
