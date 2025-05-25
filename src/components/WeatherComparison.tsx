@@ -100,8 +100,6 @@ const WeatherComparison: React.FC<WeatherComparisonProps> = ({
   ? (currentMobileWeek === 'next' ? 'Go back to this week' : (canNavigateBackward ? `View ${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}` : 'Cannot navigate before today'))
   : (canNavigateBackward ? `View ${format(previousPeriodStart, 'MMM d')} - ${format(previousPeriodEnd, 'MMM d')}` : 'Cannot navigate before today');
 
-  console.log(canGoBack, isMobile, currentMobileWeek)
-
   return (
     <section className="weather-comparison-wrapper" aria-label="Weekly weather comparison">
       <div className="navigation-controls">

@@ -199,7 +199,6 @@ const WeekView: React.FC<WeekViewProps> = ({
       </article>
     );
   };
-  console.log(filteredDays, 'greetings')
   return (
     <div className="week-view">
       {filteredDays.length > 0 ? (

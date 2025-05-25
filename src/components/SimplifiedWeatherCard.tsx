@@ -29,7 +29,6 @@ const SimplifiedWeatherCard: React.FC<SimplifiedWeatherCardProps> = ({ day, isSe
   };
 
   const scoreColorClass = getScoreColorClass(score);
-  console.log(day, 'rendered card')
   return (
     <article 
       className={`simplified-weather-card ${scoreColorClass} ${suitabilityRating} ${isSelected ? 'selected' : ''}`}
